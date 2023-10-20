@@ -20,6 +20,7 @@ jobs:
 
         exit_code=$?
         echo "::set-output name=exit_code::$exit_code"
+      continue-on-error: true
 
     - name: Check Exit Code and Set Environment Variable
       run: echo "Exit code is ${{ steps.set-exit-code.outputs.exit_code }}"
