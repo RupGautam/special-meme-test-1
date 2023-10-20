@@ -11,13 +11,12 @@ jobs:
     - name: Check Exit Code
       id: check
       run: |
-        # Use a heredoc to define a Bash script inline
-        # This script intentionally fails with an exit code of 4
-        bash <<EOF
+        # Define the script inline
+        script_result=$(bash -c '
           #!/bin/bash
           echo "Intentionally failing with exit code 4"
           exit 4
-        EOF
+        ')
 
         exit_code=$?
 
