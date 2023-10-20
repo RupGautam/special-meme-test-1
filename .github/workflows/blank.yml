@@ -1,0 +1,30 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  check-exit-code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check Exit Code
+      id: check
+      run: |
+        # Run the script that intentionally fails with exit code 4
+        test.sh
+        exit_code=$?
+
+        # Check if the exit code is 4
+        if [ $exit_code -eq 4 ]; then
+          echo "Exit code is 4. Continuing to the next job."
+          exit 0  # Exit successfully, so the job continues
+        else
+          echo "Exit code is not 4. Failing the job."
+          exit 1  # Exit with an error code to stop the job
+        fi
