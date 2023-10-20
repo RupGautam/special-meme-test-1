@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check Exit Code
-      id: check
+    - name: Set Exit Code
+      id: set-exit-code
       run: |
         # Define the script inline
         script_result=$(bash -c '
@@ -19,13 +19,12 @@ jobs:
         ')
 
         exit_code=$?
+        echo "::set-output name=exit_code::$exit_code"
 
-        # Check if the exit code is 4
-        if [ $exit_code -eq 4 ]; then
-          echo "Exit code is 4. Continuing to the next job."
-        else
-          echo "Exit code is not 4. Continuing to the next job anyway."
-        }
+    - name: Check Exit Code and Set Environment Variable
+      run: echo "Exit code is ${{ steps.set-exit-code.outputs.exit_code }}"
+      env:
+        EXIT_CODE: ${{ steps.set-exit-code.outputs.exit_code }}
 
   dummy-next-job:
     runs-on: ubuntu-latest
@@ -33,4 +32,9 @@ jobs:
 
     steps:
     - name: Dummy Next Job
-      run: echo "This is a dummy next job."
+      run: |
+        if [ "${{ env.EXIT_CODE }}" -eq 4 ]; then
+          echo "Exit code is 4. Continuing to the dummy next job."
+        else
+          echo "Exit code is not 4. Continuing to the dummy next job anyway."
+        }
