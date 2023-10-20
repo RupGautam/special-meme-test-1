@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+o# This is a basic workflow to help you get started with Actions
 
 name: CI
 
@@ -17,7 +17,8 @@ jobs:
       id: check
       run: |
         # Run the script that intentionally fails with exit code 4
-        test.sh
+        echo "Intentionally failing with exit code 4"
+        exit 4
         exit_code=$?
 
         # Check if the exit code is 4
